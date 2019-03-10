@@ -75,8 +75,6 @@ char * __stdcall GetExeHameFromWindows ( )
 		                     &rachrModuleNameBuffer ,		// LPSTR   lpFilename:	A pointer to a buffer that receives the fully qualified path of the module. If the length of the path is less than the size that the nSize parameter specifies, the function succeeds and the path is returned as a null-terminated string. If the length of the path exceeds the size that the nSize parameter specifies, the function succeeds and the string is truncated to nSize characters including the terminating null character.
 		                     MAX_PATH ) )					// DWORD   nSize:		The size of the lpFilename buffer, in TCHARs
 	{
-		printf ( "\nDEBUG: String returned by GetModuleFileName = %s\n" ,
-			     &rachrModuleNameBuffer );
 		return rachrModuleNameBuffer;
 	}	// TRUE (anticipated outcome) block, if ( GetModuleFileName ( NULL , &rachrModuleNameBuffer , MAX_PATH ) )
 	else
