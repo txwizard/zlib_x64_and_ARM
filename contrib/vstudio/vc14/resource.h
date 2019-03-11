@@ -19,12 +19,15 @@
 #define VER_PRODUCT_NAME					"ZLib.DLL"
 #define VER_PRODUCT_VERSION					"1.2.11.0"
 
-#if defined ( PROJ_miniunz_DEFINED )
+#if   defined ( PROJ_IS_miniunz )
     #define VER_FILE_DESCRIPTION			"Stand-alone UnZip Utility"
     #define VER_INTERNAL_NAME				"miniunz.exe"
 #elif defined ( PROJ_IS_minizip )
     #define VER_FILE_DESCRIPTION			"Stand-alone Zip Utility"
     #define VER_INTERNAL_NAME				"minizip.exe"
+#elif defined ( PROJ_IS_minizip )
+    #define VER_FILE_DESCRIPTION			"Stand-alone UnZip Utility"
+    #define VER_INTERNAL_NAME				"miniunz.exe"
 #elif defined ( PROJ_IS_testzlib )
     #define VER_FILE_DESCRIPTION			"Test Program for Zlib Static Link Library"
     #define VER_INTERNAL_NAME				"testzlib.exe"

@@ -83,7 +83,7 @@
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <OmitFramePointers>false</OmitFramePointers>
       <AdditionalIncludeDirectories>..\..\..;$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>ZLIB_WINAPI;_DEBUG;_CONSOLE;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);ZLIB_WINAPI;_DEBUG;_CONSOLE;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
@@ -94,10 +94,10 @@
     </ClCompile>
     <ResourceCompile>
       <Culture>0x0409</Culture>
-      <PreprocessorDefinitions>PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>$(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>version.lib;$(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
@@ -107,7 +107,7 @@
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <OmitFramePointers>false</OmitFramePointers>
       <AdditionalIncludeDirectories>..\..\..;$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>ZLIB_WINAPI;NDEBUG;_CONSOLE;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);ZLIB_WINAPI;NDEBUG;_CONSOLE;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
@@ -116,10 +116,10 @@
     </ClCompile>
     <ResourceCompile>
       <Culture>0x0409</Culture>
-      <PreprocessorDefinitions>PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>$(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>version.lib;$(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
@@ -129,7 +129,7 @@
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <OmitFramePointers>false</OmitFramePointers>
       <AdditionalIncludeDirectories>..\..\..;$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>ZLIB_WINAPI;_DEBUG;_CONSOLE;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);ZLIB_WINAPI;_DEBUG;_CONSOLE;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
@@ -140,10 +140,10 @@
     </ClCompile>
     <ResourceCompile>
       <Culture>0x0409</Culture>
-      <PreprocessorDefinitions>PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>$(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>version.lib;$(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
@@ -153,7 +153,7 @@
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <OmitFramePointers>false</OmitFramePointers>
       <AdditionalIncludeDirectories>..\..\..;$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>ZLIB_WINAPI;NDEBUG;_CONSOLE;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);ZLIB_WINAPI;NDEBUG;_CONSOLE;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
@@ -162,10 +162,10 @@
     </ClCompile>
     <ResourceCompile>
       <Culture>0x0409</Culture>
-      <PreprocessorDefinitions>PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>$(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>version.lib;$(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
@@ -173,7 +173,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\..\..;$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>ZLIB_WINAPI;_DEBUG;_CONSOLE;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);ZLIB_WINAPI;_DEBUG;_CONSOLE;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -187,10 +187,10 @@
     </ClCompile>
     <ResourceCompile>
       <Culture>0x0409</Culture>
-      <PreprocessorDefinitions>PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>$(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>version.lib;$(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)testzlib.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)testzlib.pdb</ProgramDatabaseFile>
@@ -206,7 +206,7 @@
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <OmitFramePointers>false</OmitFramePointers>
       <AdditionalIncludeDirectories>..\..\..;$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>ZLIB_WINAPI;NDEBUG;_CONSOLE;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);ZLIB_WINAPI;NDEBUG;_CONSOLE;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -220,10 +220,10 @@
     </ClCompile>
     <ResourceCompile>
       <Culture>0x0409</Culture>
-      <PreprocessorDefinitions>PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>$(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>version.lib;$(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)testzlib.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
@@ -243,7 +243,7 @@
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <OmitFramePointers>false</OmitFramePointers>
       <AdditionalIncludeDirectories>..\..\..;$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>ZLIB_WINAPI;_DEBUG;_CONSOLE;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);ZLIB_WINAPI;_DEBUG;_CONSOLE;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
@@ -252,10 +252,10 @@
     </ClCompile>
     <ResourceCompile>
       <Culture>0x0409</Culture>
-      <PreprocessorDefinitions>PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>$(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>version.lib;$(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
@@ -265,7 +265,7 @@
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <OmitFramePointers>false</OmitFramePointers>
       <AdditionalIncludeDirectories>..\..\..;$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>ZLIB_WINAPI;NDEBUG;_CONSOLE;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);ZLIB_WINAPI;NDEBUG;_CONSOLE;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
@@ -276,10 +276,10 @@
     </ClCompile>
     <ResourceCompile>
       <Culture>0x0409</Culture>
-      <PreprocessorDefinitions>PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>$(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>version.lib;$(AdditionalDependencies)</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
@@ -300,6 +300,11 @@
     <ClCompile Include="..\..\..\trees.c" />
     <ClCompile Include="..\..\..\uncompr.c" />
     <ClCompile Include="..\..\..\zutil.c" />
+    <ClCompile Include="..\GetFileVersion.c" />
+    <ClCompile Include="..\ProgramIDFromArgV.c" />
+    <ClCompile Include="..\ReportSystemError.c" />
+    <ClCompile Include="..\ShowPlatform.c" />
+    <ClCompile Include="..\ShowProgramInfo.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />

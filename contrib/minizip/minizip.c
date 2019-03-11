@@ -243,65 +243,73 @@ int isLargeFile(const char* filename)
  return largeFile;
 }
 
-int main(argc,argv)
-    int argc;
-    char *argv[];
+int main( argc , argv )
+int argc;
+char *argv [ ];
 {
     int i;
-    int opt_overwrite=0;
-    int opt_compress_level=Z_DEFAULT_COMPRESSION;
-    int opt_exclude_path=0;
-    int zipfilenamearg = 0;
-    char filename_try[MAXFILENAME+16];
+	int opt_overwrite = 0;
+	int opt_compress_level = Z_DEFAULT_COMPRESSION;
+	int opt_exclude_path = 0;
+	int zipfilenamearg = 0;
+	char filename_try [ MAXFILENAME + 16 ];
     int zipok;
-    int err=0;
+	int err = 0;
     int size_buf=0;
     void* buf=NULL;
     const char* password=NULL;
 
+	#if defined ( BUILD_ENV_IS_VISUAL_STUDIO )
+		if ( ( err = ShowProgramInfo ( argv [ 0 ] ) ) )
+		{
+			printf ( "TestZlib aborted" );
+			return err;
+		}	// if ( ( rc = ShowProgramInfo ( argv [ 0 ] ) ) )
+	#endif	/* #if defined ( BUILD_ENV_IS_VISUAL_STUDIO ) */
 
-    do_banner();
-    if (argc==1)
-    {
-        do_help();
-        return 0;
-    }
-    else
-    {
-        for (i=1;i<argc;i++)
-        {
-            if ((*argv[i])=='-')
-            {
-                const char *p=argv[i]+1;
+    do_banner ( );
 
-                while ((*p)!='\0')
-                {
-                    char c=*(p++);;
-                    if ((c=='o') || (c=='O'))
-                        opt_overwrite = 1;
-                    if ((c=='a') || (c=='A'))
-                        opt_overwrite = 2;
-                    if ((c>='0') && (c<='9'))
-                        opt_compress_level = c-'0';
-                    if ((c=='j') || (c=='J'))
-                        opt_exclude_path = 1;
+	if ( argc == 1 )
+	{
+		do_help( );
+		return 0;
+	}
+	else
+	{
+		for ( i = 1; i < argc; i++ )
+		{
+			if ( ( *argv [ i ] ) == '-' )
+			{
+				const char *p = argv [ i ] + 1;
 
-                    if (((c=='p') || (c=='P')) && (i+1<argc))
-                    {
-                        password=argv[i+1];
-                        i++;
-                    }
-                }
-            }
-            else
-            {
-                if (zipfilenamearg == 0)
-                {
-                    zipfilenamearg = i ;
-                }
-            }
-        }
-    }
+				while ( ( *p ) != '\0' )
+				{
+					char c = *( p++ );;
+					if ( ( c == 'o' ) || ( c == 'O' ) )
+						opt_overwrite = 1;
+					if ( ( c == 'a' ) || ( c == 'A' ) )
+						opt_overwrite = 2;
+					if ( ( c >= '0' ) && ( c <= '9' ) )
+						opt_compress_level = c - '0';
+					if ( ( c == 'j' ) || ( c == 'J' ) )
+						opt_exclude_path = 1;
+
+					if ( ( ( c == 'p' ) || ( c == 'P' ) ) && ( i + 1 < argc ) )
+					{
+						password = argv [ i + 1 ];
+						i++;
+					}
+				}
+			}
+			else
+			{
+				if ( zipfilenamearg == 0 )
+				{
+					zipfilenamearg = i;
+				}
+			}
+		}
+	}
 
     size_buf = WRITEBUFFERSIZE;
     buf = (void*)malloc(size_buf);

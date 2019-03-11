@@ -5,26 +5,32 @@
       <Configuration>Debug</Configuration>
       <Platform>ARM</Platform>
     </ProjectConfiguration>
+
     <ProjectConfiguration Include="Release|ARM">
       <Configuration>Release</Configuration>
       <Platform>ARM</Platform>
     </ProjectConfiguration>
+
     <ProjectConfiguration Include="Debug|ARM64">
       <Configuration>Debug</Configuration>
       <Platform>ARM64</Platform>
     </ProjectConfiguration>
+
     <ProjectConfiguration Include="Release|ARM64">
       <Configuration>Release</Configuration>
       <Platform>ARM64</Platform>
     </ProjectConfiguration>
+
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
@@ -34,27 +40,35 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+
   <PropertyGroup Label="Globals">
     <ProjectGuid>{48CDD9DC-E09F-4135-9C0C-4FE50C3C654B}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
+
   <PropertyGroup Label="Globals">
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
+
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+
   <PropertyGroup Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
+
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
+
   <ImportGroup Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30128.1</_ProjectFileVersion>
@@ -66,17 +80,30 @@
     <CodeAnalysisRules />
     <CodeAnalysisRuleAssemblies />
   </PropertyGroup>
+
+  <!--
+    ============================================================================
+    2019/03/05 - DAG - This item group feeds the AfterBuild target overrride,
+                       which appears last, since the task it overrides must
+                       first be imported.
+    ============================================================================
+  -->
+
+  <ItemGroup>
+    <TestSubjectDLL Include="$(Platform)\zlibvc_$(Configuration)\zlibvc.dll;$(Platform)\zlibvc_$(Configuration)\zlibvc.pdb" />
+  </ItemGroup>
+
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <Midl />
     <ClCompile>
       <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <OmitFramePointers>false</OmitFramePointers>
       <AdditionalIncludeDirectories>..\..\..;$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;ZLIB_WINAPI;_DEBUG;_CONSOLE;WIN64;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;ZLIB_WINAPI;_DEBUG;_CONSOLE;WIN64;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
@@ -88,27 +115,28 @@
       <ShowProgress>true</ShowProgress>
       <NullTerminateStrings>true</NullTerminateStrings>
       <Culture>0x0409</Culture>
-      <PreprocessorDefinitions>PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>$(Platform)\zlibvc_$(Configuration)\zlibwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(Platform)\zlibvc_$(Configuration)\zlibwapi.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)minizip.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)minizip.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
+
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <Midl />
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <OmitFramePointers>false</OmitFramePointers>
       <AdditionalIncludeDirectories>..\..\..;$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;ZLIB_WINAPI;NDEBUG;_CONSOLE;WIN64;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;ZLIB_WINAPI;NDEBUG;_CONSOLE;WIN64;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -121,10 +149,10 @@
       <ShowProgress>true</ShowProgress>
       <NullTerminateStrings>true</NullTerminateStrings>
       <Culture>0x0409</Culture>
-      <PreprocessorDefinitions>PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>$(Platform)\zlibvc_$(Configuration)\zlibwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(Platform)\zlibvc_$(Configuration)\zlibwapi.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)minizip.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
@@ -132,17 +160,18 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
   </ItemDefinitionGroup>
+
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <Midl />
     <ClCompile>
       <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <OmitFramePointers>false</OmitFramePointers>
       <AdditionalIncludeDirectories>..\..\..;$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;ZLIB_WINAPI;_DEBUG;_CONSOLE;WIN64;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;ZLIB_WINAPI;_DEBUG;_CONSOLE;WIN64;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
@@ -154,27 +183,28 @@
       <ShowProgress>true</ShowProgress>
       <NullTerminateStrings>true</NullTerminateStrings>
       <Culture>0x0409</Culture>
-      <PreprocessorDefinitions>PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>$(Platform)\zlibvc_$(Configuration)\zlibwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(Platform)\zlibvc_$(Configuration)\zlibwapi.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)minizip.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)minizip.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
+
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <Midl />
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <OmitFramePointers>false</OmitFramePointers>
       <AdditionalIncludeDirectories>..\..\..;$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;ZLIB_WINAPI;NDEBUG;_CONSOLE;WIN64;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;ZLIB_WINAPI;NDEBUG;_CONSOLE;WIN64;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -187,10 +217,10 @@
       <ShowProgress>true</ShowProgress>
       <NullTerminateStrings>true</NullTerminateStrings>
       <Culture>0x0409</Culture>
-      <PreprocessorDefinitions>PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>$(Platform)\zlibvc_$(Configuration)\zlibwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(Platform)\zlibvc_$(Configuration)\zlibwapi.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)minizip.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
@@ -198,16 +228,17 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
   </ItemDefinitionGroup>
+
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <OmitFramePointers>false</OmitFramePointers>
       <AdditionalIncludeDirectories>..\..\..;$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;ZLIB_WINAPI;_DEBUG;_CONSOLE;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;ZLIB_WINAPI;_DEBUG;_CONSOLE;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
@@ -220,10 +251,10 @@
       <ShowProgress>true</ShowProgress>
       <NullTerminateStrings>true</NullTerminateStrings>
       <Culture>0x0409</Culture>
-      <PreprocessorDefinitions>PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>$(Platform)\zlibstat_$(Configuration)\zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(Platform)\zlibstat_$(Configuration)\zlibstat.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)minizip.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
@@ -232,16 +263,17 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
+
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <OmitFramePointers>false</OmitFramePointers>
       <AdditionalIncludeDirectories>..\..\..;$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;ZLIB_WINAPI;NDEBUG;_CONSOLE;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;ZLIB_WINAPI;NDEBUG;_CONSOLE;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -255,10 +287,10 @@
       <ShowProgress>true</ShowProgress>
       <NullTerminateStrings>true</NullTerminateStrings>
       <Culture>0x0409</Culture>
-      <PreprocessorDefinitions>PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>$(Platform)\zlibstat_$(Configuration)\zlibstat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(Platform)\zlibstat_$(Configuration)\zlibstat.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)minizip.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
@@ -268,19 +300,20 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
+
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Midl>
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <OmitFramePointers>false</OmitFramePointers>
       <AdditionalIncludeDirectories>..\..\..;$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;ZLIB_WINAPI;_DEBUG;_CONSOLE;WIN64;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;ZLIB_WINAPI;_DEBUG;_CONSOLE;WIN64;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
@@ -292,10 +325,10 @@
       <ShowProgress>true</ShowProgress>
       <NullTerminateStrings>true</NullTerminateStrings>
       <Culture>0x0409</Culture>
-      <PreprocessorDefinitions>PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>$(Platform)\zlibvc_$(Configuration)\zlibwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(Platform)\zlibvc_$(Configuration)\zlibwapi.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)minizip.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)minizip.pdb</ProgramDatabaseFile>
@@ -303,19 +336,20 @@
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
+
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Midl>
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <OmitFramePointers>false</OmitFramePointers>
       <AdditionalIncludeDirectories>..\..\..;$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;ZLIB_WINAPI;NDEBUG;_CONSOLE;WIN64;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;ZLIB_WINAPI;NDEBUG;_CONSOLE;WIN64;PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -328,10 +362,10 @@
       <ShowProgress>true</ShowProgress>
       <NullTerminateStrings>true</NullTerminateStrings>
       <Culture>0x0409</Culture>
-      <PreprocessorDefinitions>PROJ_$(ProjectName)_DEFINED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);PROJ_IS_$(ProjectName);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>$(Platform)\zlibvc_$(Configuration)\zlibwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(Platform)\zlibvc_$(Configuration)\zlibwapi.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)minizip.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
@@ -340,21 +374,46 @@
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
+
   <ItemGroup>
     <ClCompile Include="..\..\minizip\minizip.c" />
+    <ClCompile Include="..\GetFileVersion.c" />
+    <ClCompile Include="..\ProgramIDFromArgV.c" />
+    <ClCompile Include="..\ReportSystemError.c" />
+    <ClCompile Include="..\ShowPlatform.c" />
+    <ClCompile Include="..\ShowProgramInfo.c" />
   </ItemGroup>
+
   <ItemGroup>
     <ClInclude Include="resource.h" />
   </ItemGroup>
+
   <ItemGroup>
     <ResourceCompile Include="zlibapps.rc" />
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="zlibvc.vcxproj">
       <Project>{8fd826f8-3739-44e6-8cc8-997122e53b8d}</Project>
     </ProjectReference>
   </ItemGroup>
+
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+
+  <!--
+    ============================================================================
+    2019/03/05 - DAG - The TestSubjectDLL property is set in the last of two
+                       unlabeled ItemGroup nodes at the top of the project file.
+                       Since this task overrides the definition of an empty
+                       imported target, it must follow the import. To be on the
+                       safe side, it is defined dead last.
+    ============================================================================
+  -->
+
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="@(TestSubjectDLL)" DestinationFolder="$(OutDir)" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" />
+  </Target>
 </Project>
