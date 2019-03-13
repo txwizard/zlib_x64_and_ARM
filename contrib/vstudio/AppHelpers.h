@@ -25,7 +25,10 @@ extern "C" {
 		const int pintFinalReturnCode
 	);
 
-	void    __stdcall ShowPlatform ( const char * plpszFormatString );
+	void    __stdcall ShowPlatform
+	( 
+		const char * plpszFormatString
+	);
 
 	int     __stdcall ShowProgramInfo
 	(

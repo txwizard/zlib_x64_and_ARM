@@ -78,7 +78,6 @@
     <ExceptionHandling></ExceptionHandling>
     <MinimalRebuild>false</MinimalRebuild>
     <StringPooling>true</StringPooling>
-    <MinimalRebuild>false</MinimalRebuild>
     <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     <BufferSecurityCheck>false</BufferSecurityCheck>
     <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -105,6 +104,25 @@
   <PropertyGroup Condition="'$(Platform)'=='x64'">
     <StreamingSIMDExtensions2></StreamingSIMDExtensions2>
     <FloatingPointExceptions>true</FloatingPointExceptions>
+  </PropertyGroup>
+
+  <!--
+    ============================================================================
+    2019/03/11 - DAG - If my reading of "ARM Intrinsics" is correct, it may be
+                       that the Visual C++ cross compiler for ARM processors
+                       emits NEON instructions by default. That being the case,
+                       this project configuration file explicitly enables SSE2
+                       instructions when the platform is Win32 (x86) or Win64
+                       (x64), and is silent in that regard when the target is
+                       either ARM (ARM32) or ARM64.
+
+    Reference:	"ARM Intrinsics"
+			    https://docs.microsoft.com/en-us/cpp/intrinsics/arm-intrinsics?view=vs-2017
+    ============================================================================
+  -->
+
+  <PropertyGroup Condition="'$(Platform)'=='Win32' OR '$(Platform)'=='x64' ">
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
   </PropertyGroup>
 
   <!--

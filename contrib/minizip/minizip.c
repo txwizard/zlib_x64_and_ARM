@@ -13,31 +13,34 @@
 */
 
 
-#if (!defined(_WIN32)) && (!defined(WIN32)) && (!defined(__APPLE__))
+#if ( !defined ( _WIN32 ) ) && ( !defined ( WIN32 ) ) && ( !defined ( __APPLE__ ) )
         #ifndef __USE_FILE_OFFSET64
                 #define __USE_FILE_OFFSET64
-        #endif
+        #endif	/* #ifndef __USE_FILE_OFFSET64 */
+
         #ifndef __USE_LARGEFILE64
                 #define __USE_LARGEFILE64
-        #endif
+        #endif	/* #ifndef __USE_LARGEFILE64 */
+
         #ifndef _LARGEFILE64_SOURCE
                 #define _LARGEFILE64_SOURCE
-        #endif
+        #endif	/* #ifndef _LARGEFILE64_SOURCE */
+
         #ifndef _FILE_OFFSET_BIT
                 #define _FILE_OFFSET_BIT 64
-        #endif
-#endif
+        #endif	/* #ifndef _FILE_OFFSET_BIT */
+#endif	/* #if ( !defined ( _WIN32 ) ) && ( !defined ( WIN32 ) ) && ( !defined ( __APPLE__ ) ) */
 
 #ifdef __APPLE__
 // In darwin and perhaps other BSD variants off_t is a 64 bit value, hence no need for specific 64 bit functions
 #define FOPEN_FUNC(filename, mode) fopen(filename, mode)
 #define FTELLO_FUNC(stream) ftello(stream)
 #define FSEEKO_FUNC(stream, offset, origin) fseeko(stream, offset, origin)
-#else
-#define FOPEN_FUNC(filename, mode) fopen64(filename, mode)
-#define FTELLO_FUNC(stream) ftello64(stream)
-#define FSEEKO_FUNC(stream, offset, origin) fseeko64(stream, offset, origin)
-#endif
+#else	/* #ifdef __APPLE__ */
+#define FOPEN_FUNC(filename, mode) fopen64 ( filename , mode)
+#define FTELLO_FUNC(stream) ftello64 ( stream )
+#define FSEEKO_FUNC(stream, offset, origin) fseeko64 ( stream , offset , origin )
+#endif	/* #ifdef __APPLE__ */
 
 
 
@@ -56,44 +59,56 @@
 # include <utime.h>
 # include <sys/types.h>
 # include <sys/stat.h>
-#endif
+#endif	/* #ifdef _WIN32 */
 
 #include "zip.h"
 
 #ifdef _WIN32
         #define USEWIN32IOAPI
         #include "iowin32.h"
-#endif
+#endif	/* #ifdef _WIN32 */
+
+#if defined ( BUILD_ENV_IS_VISUAL_STUDIO )
+	#include "..\vstudio\AppHelpers.h"
+#endif	/* #if defined ( BUILD_ENV_IS_VISUAL_STUDIO ) */
 
 
-
-#define WRITEBUFFERSIZE (16384)
-#define MAXFILENAME (256)
+#define WRITEBUFFERSIZE ( 16384 )
+#define MAXFILENAME     ( 256 )
 
 #ifdef _WIN32
-uLong filetime(f, tmzip, dt)
-    char *f;                /* name of file to get info on */
-    tm_zip *tmzip;             /* return value: access, modific. and creation times */
-    uLong *dt;             /* dostime */
-{
-  int ret = 0;
-  {
-      FILETIME ftLocal;
-      HANDLE hFind;
-      WIN32_FIND_DATAA ff32;
+	uLong filetime
+	(
+		f,
+		tmzip,
+		dt
+	)
+    char *f;					/* name of file to get info on */
+    tm_zip *tmzip;				/* return value: access, modific. and creation times */
+    uLong *dt;					/* dostime */
+	
+	{
+		int ret = 0;
 
-      hFind = FindFirstFileA(f,&ff32);
-      if (hFind != INVALID_HANDLE_VALUE)
-      {
-        FileTimeToLocalFileTime(&(ff32.ftLastWriteTime),&ftLocal);
-        FileTimeToDosDateTime(&ftLocal,((LPWORD)dt)+1,((LPWORD)dt)+0);
-        FindClose(hFind);
-        ret = 1;
-      }
-  }
-  return ret;
-}
-#else
+		{
+			FILETIME ftLocal;
+			HANDLE hFind;
+			WIN32_FIND_DATAA ff32;
+
+			hFind = FindFirstFileA( f , &ff32 );
+			
+			if ( hFind != INVALID_HANDLE_VALUE )
+			{
+				FileTimeToLocalFileTime ( &( ff32.ftLastWriteTime ) , &ftLocal );
+				FileTimeToDosDateTime ( &ftLocal , ( ( LPWORD ) dt ) + 1 , ( ( LPWORD ) dt ) + 0 );
+				FindClose ( hFind );
+				ret = 1;
+			}	// if ( hFind != INVALID_HANDLE_VALUE )
+		}	// int ret = 0;
+
+		return ret;
+	}	// filetime
+#else	/* #ifdef _WIN32 */
 #ifdef unix || __APPLE__
 uLong filetime(f, tmzip, dt)
     char *f;               /* name of file to get info on */
@@ -148,9 +163,7 @@ uLong filetime(f, tmzip, dt)
 #endif
 
 
-
-
-int check_exist_file(filename)
+int check_exist_file ( filename )
     const char* filename;
 {
     FILE* ftestexist;
@@ -161,91 +174,116 @@ int check_exist_file(filename)
     else
         fclose(ftestexist);
     return ret;
-}
+}	// check_exist_file
 
-void do_banner()
-{
-    printf("MiniZip 1.1, demo of zLib + MiniZip64 package, written by Gilles Vollant\n");
-    printf("more info on MiniZip at http://www.winimage.com/zLibDll/minizip.html\n\n");
-}
 
-void do_help()
+void do_banner( )
 {
-    printf("Usage : minizip [-o] [-a] [-0 to -9] [-p password] [-j] file.zip [files_to_add]\n\n" \
-           "  -o  Overwrite existing file.zip\n" \
-           "  -a  Append to existing file.zip\n" \
-           "  -0  Store only\n" \
-           "  -1  Compress faster\n" \
-           "  -9  Compress better\n\n" \
-           "  -j  exclude path. store only the file name.\n\n");
-}
+	printf( "MiniZip 1.1, demo of zLib + MiniZip64 package, written by Gilles Vollant\n" );
+	printf( "more info on MiniZip at http://www.winimage.com/zLibDll/minizip.html\n\n" );
+}	// do_banner
+
+
+void do_help( )
+{
+	printf ( "Usage : minizip [-o] [-a] [-0 to -9] [-p password] [-j] file.zip [files_to_add]\n\n" \
+		     "  -o  Overwrite existing file.zip\n" \
+		     "  -a  Append to existing file.zip\n" \
+		     "  -0  Store only\n" \
+		     "  -1  Compress faster\n" \
+		     "  -9  Compress better\n\n" \
+		     "  -j  exclude path. store only the file name.\n\n" );
+}	// void do_help
+
 
 /* calculate the CRC32 of a file,
    because to encrypt a file, we need known the CRC32 of the file before */
-int getFileCrc(const char* filenameinzip,void*buf,unsigned long size_buf,unsigned long* result_crc)
+int getFileCrc
+(
+	const char*    filenameinzip ,
+	void*          buf ,
+	unsigned long  size_buf ,
+	unsigned long* result_crc
+)
 {
-   unsigned long calculate_crc=0;
-   int err=ZIP_OK;
-   FILE * fin = FOPEN_FUNC(filenameinzip,"rb");
+	unsigned long calculate_crc = 0;
+	int err = ZIP_OK;
+	FILE * fin = FOPEN_FUNC ( filenameinzip ,
+		                      "rb" );
 
-   unsigned long size_read = 0;
-   unsigned long total_read = 0;
-   if (fin==NULL)
-   {
-       err = ZIP_ERRNO;
-   }
+	unsigned long size_read = 0;
+	unsigned long total_read = 0;
 
-    if (err == ZIP_OK)
-        do
-        {
-            err = ZIP_OK;
-            size_read = (int)fread(buf,1,size_buf,fin);
-            if (size_read < size_buf)
-                if (feof(fin)==0)
-            {
-                printf("error in reading %s\n",filenameinzip);
-                err = ZIP_ERRNO;
-            }
+	if ( fin == NULL )
+	{
+		err = ZIP_ERRNO;
+	}	// if ( fin == NULL )
 
-            if (size_read>0)
-                calculate_crc = crc32(calculate_crc,buf,size_read);
-            total_read += size_read;
+	if ( err == ZIP_OK )
+		do
+		{	// while ( ( err == ZIP_OK ) && ( size_read > 0 ) );
+			err = ZIP_OK;
+			size_read = ( int ) fread( buf , 1 , size_buf , fin );
 
-        } while ((err == ZIP_OK) && (size_read>0));
+			if ( size_read < size_buf )
+				if ( feof( fin ) == 0 )
+				{
+					printf ( "error in reading %s\n" ,
+						     filenameinzip );
+					err = ZIP_ERRNO;
+				}	// if ( feof( fin ) == 0 )
 
-    if (fin)
-        fclose(fin);
+			if ( size_read > 0 )
+				calculate_crc = crc32 ( calculate_crc ,
+					                    buf ,
+					                    size_read );
 
-    *result_crc=calculate_crc;
-    printf("file %s crc %lx\n", filenameinzip, calculate_crc);
-    return err;
-}
+			total_read += size_read;
 
-int isLargeFile(const char* filename)
+		} while ( ( err == ZIP_OK ) && ( size_read > 0 ) );
+
+		if ( fin )
+			fclose( fin );
+
+		*result_crc = calculate_crc;
+		printf ( "file %s crc %lx\n" ,
+			     filenameinzip ,
+			     calculate_crc );
+		return err;
+}	// getFileCrc
+
+int isLargeFile ( const char* filename )
 {
-  int largeFile = 0;
-  ZPOS64_T pos = 0;
-  FILE* pFile = FOPEN_FUNC(filename, "rb");
+	int largeFile = 0;
+	ZPOS64_T pos = 0;
+	FILE* pFile = FOPEN_FUNC ( filename ,
+		                       "rb" );
 
-  if(pFile != NULL)
-  {
-    int n = FSEEKO_FUNC(pFile, 0, SEEK_END);
-    pos = FTELLO_FUNC(pFile);
+	if ( pFile != NULL )
+	{
+		int n = FSEEKO_FUNC ( pFile ,
+			                  0 ,
+			                  SEEK_END );
+		pos = FTELLO_FUNC ( pFile );
 
-                printf("File : %s is %lld bytes\n", filename, pos);
+		printf ( "File : %s is %lld bytes\n" ,
+			     filename ,
+			     pos );
 
-    if(pos >= 0xffffffff)
-     largeFile = 1;
+		if ( pos >= 0xffffffff )
+			largeFile = 1;
 
-                fclose(pFile);
-  }
+		fclose ( pFile );
+	}	// if ( pFile != NULL )
 
- return largeFile;
-}
+	return largeFile;
+}	// isLargeFile
 
-int main( argc , argv )
-int argc;
-char *argv [ ];
+int main
+(
+	int    argc ,
+	char * argv [ ]
+)
 {
     int i;
 	int opt_overwrite = 0;
@@ -271,9 +309,9 @@ char *argv [ ];
 
 	if ( argc == 1 )
 	{
-		do_help( );
+		do_help ( );
 		return 0;
-	}
+	}	// TRUE (degenerate case) block, if ( argc == 1 )
 	else
 	{
 		for ( i = 1; i < argc; i++ )
@@ -284,13 +322,17 @@ char *argv [ ];
 
 				while ( ( *p ) != '\0' )
 				{
-					char c = *( p++ );;
+					char c = *( p++ );
+
 					if ( ( c == 'o' ) || ( c == 'O' ) )
 						opt_overwrite = 1;
+
 					if ( ( c == 'a' ) || ( c == 'A' ) )
 						opt_overwrite = 2;
+
 					if ( ( c >= '0' ) && ( c <= '9' ) )
 						opt_compress_level = c - '0';
+
 					if ( ( c == 'j' ) || ( c == 'J' ) )
 						opt_exclude_path = 1;
 
@@ -298,231 +340,267 @@ char *argv [ ];
 					{
 						password = argv [ i + 1 ];
 						i++;
-					}
-				}
-			}
+					}	// if ( ( ( c == 'p' ) || ( c == 'P' ) ) && ( i + 1 < argc ) )
+				}	// while ( ( *p ) != '\0' )
+			}	// TRUE (anticipated outcome) block, if ( ( *argv [ i ] ) == '-' )
 			else
 			{
 				if ( zipfilenamearg == 0 )
 				{
 					zipfilenamearg = i;
-				}
-			}
-		}
-	}
+				}	// if ( zipfilenamearg == 0 )
+			}	// FALSE (unanticipated outcome) block, if ( ( *argv [ i ] ) == '-' )
+		}	// for ( i = 1; i < argc; i++ )
+	}	// FALSE (anticipated and desired outcome) block, if ( argc == 1 )
 
     size_buf = WRITEBUFFERSIZE;
-    buf = (void*)malloc(size_buf);
-    if (buf==NULL)
-    {
-        printf("Error allocating memory\n");
-        return ZIP_INTERNALERROR;
-    }
+	buf = ( void * ) malloc ( size_buf );
 
-    if (zipfilenamearg==0)
-    {
-        zipok=0;
-    }
-    else
-    {
-        int i,len;
-        int dot_found=0;
+	if ( buf == NULL )
+	{
+		printf ( "Error allocating memory\n" );
+		return ZIP_INTERNALERROR;
+	}	// if ( buf == NULL )
 
-        zipok = 1 ;
-        strncpy(filename_try, argv[zipfilenamearg],MAXFILENAME-1);
-        /* strncpy doesnt append the trailing NULL, of the string is too long. */
-        filename_try[ MAXFILENAME ] = '\0';
+	if ( zipfilenamearg == 0 )
+	{
+		zipok = 0;
+	}	// TRUE (degenerate case, and unexpected outcome) block, if ( zipfilenamearg == 0 )
+	else
+	{
+		int i , len;
+		int dot_found = 0;
 
-        len=(int)strlen(filename_try);
-        for (i=0;i<len;i++)
-            if (filename_try[i]=='.')
-                dot_found=1;
+		zipok = 1;
+		strncpy ( filename_try ,
+			      argv [ zipfilenamearg ] ,
+			      MAXFILENAME - 1 );
+		/* strncpy doesnt append the trailing NULL, of the string is too long. */
+		filename_try [ MAXFILENAME ] = '\0';
 
-        if (dot_found==0)
-            strcat(filename_try,".zip");
+		len = ( int ) strlen ( filename_try );
 
-        if (opt_overwrite==2)
-        {
-            /* if the file don't exist, we not append file */
-            if (check_exist_file(filename_try)==0)
-                opt_overwrite=1;
-        }
-        else
-        if (opt_overwrite==0)
-            if (check_exist_file(filename_try)!=0)
-            {
-                char rep=0;
-                do
-                {
-                    char answer[128];
-                    int ret;
-                    printf("The file %s exists. Overwrite ? [y]es, [n]o, [a]ppend : ",filename_try);
-                    ret = scanf("%1s",answer);
-                    if (ret != 1)
-                    {
-                       exit(EXIT_FAILURE);
-                    }
-                    rep = answer[0] ;
-                    if ((rep>='a') && (rep<='z'))
-                        rep -= 0x20;
-                }
-                while ((rep!='Y') && (rep!='N') && (rep!='A'));
-                if (rep=='N')
-                    zipok = 0;
-                if (rep=='A')
-                    opt_overwrite = 2;
-            }
-    }
+		for ( i = 0; i < len; i++ )
+			if ( filename_try [ i ] == '.' )
+				dot_found = 1;
 
-    if (zipok==1)
-    {
-        zipFile zf;
-        int errclose;
+		if ( dot_found == 0 )
+			strcat( filename_try , ".zip" );
+
+		if ( opt_overwrite == 2 )
+		{
+			/* if the file don't exist, we not append file */
+			if ( check_exist_file( filename_try ) == 0 )
+				opt_overwrite = 1;
+		}
+		else
+			if ( opt_overwrite == 0 )
+				if ( check_exist_file( filename_try ) != 0 )
+				{
+					char rep = 0;
+
+					do
+					{	// while ( ( rep != 'Y' ) && ( rep != 'N' ) && ( rep != 'A' ) );
+						char answer [ 128 ];
+						int ret;
+						printf ( "The file %s exists. Overwrite ? [y]es, [n]o, [a]ppend : " ,
+							     filename_try );
+						ret = scanf( "%1s" , answer );
+						
+						if ( ret != 1 )
+						{
+							exit ( EXIT_FAILURE );
+						}	// if ( ret != 1 )
+
+						rep = answer [ 0 ];
+
+						if ( ( rep >= 'a' ) && ( rep <= 'z' ) )
+							rep -= 0x20;
+					} while ( ( rep != 'Y' ) && ( rep != 'N' ) && ( rep != 'A' ) );
+
+					if ( rep == 'N' )
+						zipok = 0;
+
+					if ( rep == 'A' )
+						opt_overwrite = 2;
+				}	// if ( check_exist_file( filename_try ) != 0 )
+	}	// FALSE (anticipated and desired outcome) block, if ( zipfilenamearg == 0 )
+
+	if ( zipok == 1 )
+	{
+		zipFile zf;
+		int errclose;
 #        ifdef USEWIN32IOAPI
-        zlib_filefunc64_def ffunc;
-        fill_win32_filefunc64A(&ffunc);
-        zf = zipOpen2_64(filename_try,(opt_overwrite==2) ? 2 : 0,NULL,&ffunc);
+		zlib_filefunc64_def ffunc;
+		fill_win32_filefunc64A ( &ffunc );
+		zf = zipOpen2_64 ( filename_try , ( opt_overwrite == 2 ) ? 2 : 0 , NULL , &ffunc );
 #        else
-        zf = zipOpen64(filename_try,(opt_overwrite==2) ? 2 : 0);
+		zf = zipOpen64( filename_try , ( opt_overwrite == 2 ) ? 2 : 0 );
 #        endif
 
-        if (zf == NULL)
-        {
-            printf("error opening %s\n",filename_try);
-            err= ZIP_ERRNO;
-        }
-        else
-            printf("creating %s\n",filename_try);
+		if ( zf == NULL )
+		{
+			printf ( "error opening %s\n" ,
+				     filename_try );
+			err = ZIP_ERRNO;
+		}	// TRUE (unanticipated outcome) block, if ( zf == NULL )
+		else
+		{
+			printf ( "creating %s\n" ,
+				     filename_try );
+		}	// FALSE (anticipated outcome) block, if ( zf == NULL )
 
-        for (i=zipfilenamearg+1;(i<argc) && (err==ZIP_OK);i++)
-        {
-            if (!((((*(argv[i]))=='-') || ((*(argv[i]))=='/')) &&
-                  ((argv[i][1]=='o') || (argv[i][1]=='O') ||
-                   (argv[i][1]=='a') || (argv[i][1]=='A') ||
-                   (argv[i][1]=='p') || (argv[i][1]=='P') ||
-                   ((argv[i][1]>='0') || (argv[i][1]<='9'))) &&
-                  (strlen(argv[i]) == 2)))
-            {
-                FILE * fin;
-                int size_read;
-                const char* filenameinzip = argv[i];
-                const char *savefilenameinzip;
-                zip_fileinfo zi;
-                unsigned long crcFile=0;
-                int zip64 = 0;
+		for ( i = zipfilenamearg + 1; ( i < argc ) && ( err == ZIP_OK ); i++ )
+		{
+			if ( !( ( ( ( *( argv [ i ] ) ) == '-' ) || ( ( *( argv [ i ] ) ) == '/' ) ) &&
+				( ( argv [ i ] [ 1 ] == 'o' ) || ( argv [ i ] [ 1 ] == 'O' ) ||
+				( argv [ i ] [ 1 ] == 'a' ) || ( argv [ i ] [ 1 ] == 'A' ) ||
+					( argv [ i ] [ 1 ] == 'p' ) || ( argv [ i ] [ 1 ] == 'P' ) ||
+					( ( argv [ i ] [ 1 ] >= '0' ) || ( argv [ i ] [ 1 ] <= '9' ) ) ) &&
+					( strlen( argv [ i ] ) == 2 ) ) )
+			{
+				FILE * fin;
+				int size_read;
+				const char* filenameinzip = argv [ i ];
+				const char *savefilenameinzip;
+				zip_fileinfo zi;
+				unsigned long crcFile = 0;
+				int zip64 = 0;
 
-                zi.tmz_date.tm_sec = zi.tmz_date.tm_min = zi.tmz_date.tm_hour =
-                zi.tmz_date.tm_mday = zi.tmz_date.tm_mon = zi.tmz_date.tm_year = 0;
-                zi.dosDate = 0;
-                zi.internal_fa = 0;
-                zi.external_fa = 0;
-                filetime(filenameinzip,&zi.tmz_date,&zi.dosDate);
+				zi.tmz_date.tm_sec = zi.tmz_date.tm_min = zi.tmz_date.tm_hour =
+					zi.tmz_date.tm_mday = zi.tmz_date.tm_mon = zi.tmz_date.tm_year = 0;
+				zi.dosDate = 0;
+				zi.internal_fa = 0;
+				zi.external_fa = 0;
+				filetime ( filenameinzip ,
+					       &zi.tmz_date ,
+					       &zi.dosDate );
 
 /*
-                err = zipOpenNewFileInZip(zf,filenameinzip,&zi,
-                                 NULL,0,NULL,0,NULL / * comment * /,
-                                 (opt_compress_level != 0) ? Z_DEFLATED : 0,
-                                 opt_compress_level);
+				err = zipOpenNewFileInZip(zf,filenameinzip,&zi,
+								 NULL,0,NULL,0,NULL / * comment * /,
+								 (opt_compress_level != 0) ? Z_DEFLATED : 0,
+								 opt_compress_level);
 */
-                if ((password != NULL) && (err==ZIP_OK))
-                    err = getFileCrc(filenameinzip,buf,size_buf,&crcFile);
+				if ( ( password != NULL ) && ( err == ZIP_OK ) )
+					err = getFileCrc ( filenameinzip ,
+						               buf ,
+						               size_buf ,
+						               &crcFile );
 
-                zip64 = isLargeFile(filenameinzip);
+				zip64 = isLargeFile ( filenameinzip );
 
-                                                         /* The path name saved, should not include a leading slash. */
-               /*if it did, windows/xp and dynazip couldn't read the zip file. */
-                 savefilenameinzip = filenameinzip;
-                 while( savefilenameinzip[0] == '\\' || savefilenameinzip[0] == '/' )
-                 {
-                     savefilenameinzip++;
-                 }
+				/* The path name saved, should not include a leading slash.      */
+				/* if it did, windows/xp and dynazip couldn't read the zip file. */
+				savefilenameinzip = filenameinzip;
+				while ( savefilenameinzip [ 0 ] == '\\' || savefilenameinzip [ 0 ] == '/' )
+				{
+					savefilenameinzip++;
+				}	// while ( savefilenameinzip [ 0 ] == '\\' || savefilenameinzip [ 0 ] == '/' )
 
-                 /*should the zip file contain any path at all?*/
-                 if( opt_exclude_path )
-                 {
-                     const char *tmpptr;
-                     const char *lastslash = 0;
-                     for( tmpptr = savefilenameinzip; *tmpptr; tmpptr++)
-                     {
-                         if( *tmpptr == '\\' || *tmpptr == '/')
-                         {
-                             lastslash = tmpptr;
-                         }
-                     }
-                     if( lastslash != NULL )
-                     {
-                         savefilenameinzip = lastslash+1; // base filename follows last slash.
-                     }
-                 }
+				/*should the zip file contain any path at all?*/
+				if ( opt_exclude_path )
+				{
+					const char *tmpptr;
+					const char *lastslash = 0;
 
-                 /**/
-                err = zipOpenNewFileInZip3_64(zf,savefilenameinzip,&zi,
-                                 NULL,0,NULL,0,NULL /* comment*/,
-                                 (opt_compress_level != 0) ? Z_DEFLATED : 0,
-                                 opt_compress_level,0,
-                                 /* -MAX_WBITS, DEF_MEM_LEVEL, Z_DEFAULT_STRATEGY, */
-                                 -MAX_WBITS, DEF_MEM_LEVEL, Z_DEFAULT_STRATEGY,
-                                 password,crcFile, zip64);
+					for ( tmpptr = savefilenameinzip; *tmpptr; tmpptr++ )
+					{
+						if ( *tmpptr == '\\' || *tmpptr == '/' )
+						{
+							lastslash = tmpptr;
+						}	// if ( *tmpptr == '\\' || *tmpptr == '/' )
+					}	// for ( tmpptr = savefilenameinzip; *tmpptr; tmpptr++ )
 
-                if (err != ZIP_OK)
-                    printf("error in opening %s in zipfile\n",filenameinzip);
-                else
-                {
-                    fin = FOPEN_FUNC(filenameinzip,"rb");
-                    if (fin==NULL)
-                    {
-                        err=ZIP_ERRNO;
-                        printf("error in opening %s for reading\n",filenameinzip);
-                    }
-                }
+					if ( lastslash != NULL )
+					{
+						savefilenameinzip = lastslash + 1; // base filename follows last slash.
+					}	// if ( lastslash != NULL )
+				}	// if ( opt_exclude_path )
 
-                if (err == ZIP_OK)
-                    do
-                    {
-                        err = ZIP_OK;
-                        size_read = (int)fread(buf,1,size_buf,fin);
-                        if (size_read < size_buf)
-                            if (feof(fin)==0)
-                        {
-                            printf("error in reading %s\n",filenameinzip);
-                            err = ZIP_ERRNO;
-                        }
+				/**/
+				err = zipOpenNewFileInZip3_64( zf , savefilenameinzip , &zi ,
+					NULL , 0 , NULL , 0 , NULL /* comment*/ ,
+					( opt_compress_level != 0 ) ? Z_DEFLATED : 0 ,
+					opt_compress_level , 0 ,
+					/* -MAX_WBITS, DEF_MEM_LEVEL, Z_DEFAULT_STRATEGY, */
+					-MAX_WBITS , DEF_MEM_LEVEL , Z_DEFAULT_STRATEGY ,
+					password , crcFile , zip64 );
 
-                        if (size_read>0)
-                        {
-                            err = zipWriteInFileInZip (zf,buf,size_read);
-                            if (err<0)
-                            {
-                                printf("error in writing %s in the zipfile\n",
-                                                 filenameinzip);
-                            }
+				if ( err != ZIP_OK )
+				{
+					printf( "error in opening %s in zipfile\n" , filenameinzip );
+				}	// TRUE (unanticipated outcome) block, if ( err != ZIP_OK )
+				else
+				{
+					fin = FOPEN_FUNC ( filenameinzip ,
+						               "rb" );
+					
+					if ( fin == NULL )
+					{
+						err = ZIP_ERRNO;
+						printf ( "error in opening %s for reading\n" ,
+							     filenameinzip );
+					}	// if ( fin == NULL )
+				}	// FALSE (anticipated outcome) block, if ( err != ZIP_OK )
 
-                        }
-                    } while ((err == ZIP_OK) && (size_read>0));
+				if ( err == ZIP_OK )
+					do
+					{
+						err = ZIP_OK;
+						size_read = ( int ) fread ( buf ,
+							                        1 ,
+							                        size_buf ,
+							                        fin );
 
-                if (fin)
-                    fclose(fin);
+						if ( size_read < size_buf )
+							if ( feof ( fin ) == 0 )
+							{
+								printf ( "error in reading %s\n" ,
+									     filenameinzip );
+								err = ZIP_ERRNO;
+							}	// if ( feof ( fin ) == 0 )
 
-                if (err<0)
-                    err=ZIP_ERRNO;
-                else
-                {
-                    err = zipCloseFileInZip(zf);
-                    if (err!=ZIP_OK)
-                        printf("error in closing %s in the zipfile\n",
-                                    filenameinzip);
-                }
-            }
-        }
-        errclose = zipClose(zf,NULL);
-        if (errclose != ZIP_OK)
-            printf("error in closing %s\n",filename_try);
-    }
-    else
-    {
-       do_help();
-    }
+						if ( size_read > 0 )
+						{
+							err = zipWriteInFileInZip( zf , buf , size_read );
+							
+							if ( err < 0 )
+							{
+								printf ( "error in writing %s in the zipfile\n" ,
+									     filenameinzip );
+							}	// if ( err < 0 )
+						}	// if ( size_read > 0 )
+					} while ( ( err == ZIP_OK ) && ( size_read > 0 ) );
 
-    free(buf);
+					if ( fin )
+						fclose ( fin );
+
+					if ( err < 0 )
+						err = ZIP_ERRNO;
+					else
+					{
+						err = zipCloseFileInZip ( zf );
+
+						if ( err != ZIP_OK )
+							printf ( "error in closing %s in the zipfile\n" ,
+								     filenameinzip );
+					}	// if ( err < 0 )
+			}	// if ( !( ( ( ( *( argv [ i ] ) ) == '-' ) || ( ( *( argv [ i ] ) ) == '/' ) ) && ...
+		}	// for ( i = zipfilenamearg + 1; ( i < argc ) && ( err == ZIP_OK ); i++ )
+
+		errclose = zipClose ( zf ,
+			                  NULL );
+
+		if ( errclose != ZIP_OK )
+			printf ( "error in closing %s\n" ,
+				     filename_try );
+	}	// TRUE (anticipated outcome) block, if ( zipok == 1 )
+	else
+	{
+		do_help ( );
+	}	// FALSE (unanticipated outcome) block, if ( zipok == 1 )
+
+	free ( buf );
     return 0;
 }
