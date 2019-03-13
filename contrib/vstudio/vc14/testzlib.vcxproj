@@ -42,8 +42,18 @@
     </ProjectConfiguration>
   </ItemGroup>
 
+  <!--
+    ============================================================================
+    2019/03/13 - DAG - This item group feeds the AfterBuild target overrride,
+                       which appears last, since the task it overrides must
+                       first be imported.
+
+                       $(SolutionDir) has a terminal backslash.
+    ============================================================================
+  -->
+
   <ItemGroup>
-  	<TestSubjectDLL Include="..\zlibvc_$(Configuration)\zlibvc.dll;..\zlibvc_$(Configuration)\zlibvc.pdb" />
+    <TestSubjectDLL Include="$(Platform)\zlibvc_$(Configuration)\zlibvc.dll;$(Platform)\zlibvc_$(Configuration)\zlibvc.pdb;$(SolutionDir)vcruntime140\$(Platform)\vcruntime140.dll" />
   </ItemGroup>
 
   <PropertyGroup Label="Globals">
@@ -365,4 +375,22 @@
 
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+
+  <!--
+    ============================================================================
+    2019/03/05 - DAG - The TestSubjectDLL property is set in the last of two
+                       unlabeled ItemGroup nodes at the top of the project file.
+                       Since this task overrides the definition of an empty
+                       imported target, it must follow the import. To be on the
+                       safe side, it is defined dead last.
+    ============================================================================
+  -->
+
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="@(TestSubjectDLL)"
+    	  DestinationFolder="$(OutDir)"
+    	  OverwriteReadOnlyFiles="true"
+    	  SkipUnchangedFiles="true"
+     />
+  </Target>
 </Project>

@@ -62,6 +62,19 @@
     </ProjectConfiguration>
   </ItemGroup>
 
+  <!--
+    ============================================================================
+    2019/03/13 - DAG - This item group feeds the AfterBuild target overrride,
+                       which appears last, since the task it overrides must
+                       first be imported.
+
+                       $(SolutionDir) has a terminal backslash.
+    ============================================================================
+  -->
+
+  <ItemGroup>
+    <TestSubjectDLL Include="$(SolutionDir)vcruntime140\$(Platform)\vcruntime140.dll" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{745DEC58-EBB3-47A9-A9B8-4C6627C01BF8}</ProjectGuid>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
@@ -548,4 +561,22 @@
 
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+
+  <!--
+    ============================================================================
+    2019/03/05 - DAG - The TestSubjectDLL property is set in the last of two
+                       unlabeled ItemGroup nodes at the top of the project file.
+                       Since this task overrides the definition of an empty
+                       imported target, it must follow the import. To be on the
+                       safe side, it is defined dead last.
+    ============================================================================
+  -->
+
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="@(TestSubjectDLL)"
+    	  DestinationFolder="$(OutDir)"
+    	  OverwriteReadOnlyFiles="true"
+    	  SkipUnchangedFiles="true"
+     />
+  </Target>
 </Project>

@@ -93,13 +93,16 @@
 
   <!--
     ============================================================================
-    2019/03/05 - DAG - This item group feeds the AfterBuild target overrride,
+    2019/03/13 - DAG - This item group feeds the AfterBuild target overrride,
                        which appears last, since the task it overrides must
                        first be imported.
+
+                       $(SolutionDir) has a terminal backslash.
     ============================================================================
   -->
+
   <ItemGroup>
-    <TestSubjectDLL Include="$(Platform)\zlibvc_$(Configuration)\zlibvc.dll;$(Platform)\zlibvc_$(Configuration)\zlibvc.pdb" />
+    <TestSubjectDLL Include="$(Platform)\zlibvc_$(Configuration)\zlibvc.dll;$(Platform)\zlibvc_$(Configuration)\zlibvc.pdb;$(SolutionDir)vcruntime140\$(Platform)\vcruntime140.dll" />
   </ItemGroup>
 
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
@@ -497,6 +500,10 @@
   -->
 
   <Target Name="AfterBuild">
-    <Copy SourceFiles="@(TestSubjectDLL)" DestinationFolder="$(OutDir)" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(TestSubjectDLL)"
+    	  DestinationFolder="$(OutDir)"
+    	  OverwriteReadOnlyFiles="true"
+    	  SkipUnchangedFiles="true"
+     />
   </Target>
 </Project>
