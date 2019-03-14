@@ -1,4 +1,4 @@
-# ZLib for Windows ReadMe
+# ZLib for Windows for Intel and ARM Processors ReadMe
 
 The purpose of this repository is to publish a port of the famous ZLib (zlib,
 for purists - you know who you are) library for creating Zip archives and
