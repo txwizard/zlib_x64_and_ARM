@@ -64,8 +64,28 @@
                        first be imported.
 
                        $(SolutionDir) has a terminal backslash.
+
+    2019/03/14 - DAG - To find other empty targets such as these two that you
+                       can redefine (override) to do tuff, look for the
+                       following string at the beginning of an XML comment.
+
+                       Redefine this target in your project
+
+                       The BeforeBuildGenerateSources target is ideal for
+                       displaying MSBuild property values.
     ============================================================================
   -->
+
+  <Target Name="BeforeBuildGenerateSources">
+	<Message Text="SolutionDir    = $(SolutionDir)" />
+	<Message Text="ProjectDir     = $(ProjectDir)" />
+	<Message Text="ProjectName    = $(ProjectName)" />
+	<Message Text="ProjectExt     = $(ProjectExt)" />
+	<Message Text="Platform       = $(Platform)" />
+	<Message Text="Configuration  = $(Configuration)" />
+	<Message Text="OutDir         = $(OutDir)" />
+	<Message Text="IntDir         = $(IntDir)" />
+  </Target>
 
   <ItemGroup>
     <TestSubjectDLL Include="$(SolutionDir)vcruntime140\$(Platform)\vcruntime140.dll" />
@@ -91,6 +111,7 @@
 
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
+
   <ImportGroup Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
@@ -121,12 +142,16 @@
 
     Reference:	"ARM Intrinsics"
 			    https://docs.microsoft.com/en-us/cpp/intrinsics/arm-intrinsics?view=vs-2017
+
+	2019/03/22 - DAG - It appears that AdvancedVectorExtensions2 is equivalent
+	                   to StreamingSIMDExtensions2 for the x64 platform. For all
+	                   other platforms, both are disabled.
+
+	                   After further experimentation, I'm leaving the decision
+	                   to the compiler, since it appears that the default is to
+	                   use them if available.
     ============================================================================
   -->
-
-  <PropertyGroup Condition="'$(Platform)'=='Win32' OR '$(Platform)'=='x64' ">
-      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
-  </PropertyGroup>
 
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -136,44 +161,52 @@
       <TargetEnvironment>Win32</TargetEnvironment>
       <TypeLibraryName>$(OutDir)$(ProjectName).tlb</TypeLibraryName>
     </Midl>
+
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\..\..;..\..\masmx86;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;ZLIB_WINAPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ExceptionHandling></ExceptionHandling>
+      <ExceptionHandling>
+      </ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <PrecompiledHeaderOutputFile>$(IntDir)$(ProjectName).pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)</ObjectFileName>
+      <OmitFramePointers>false</OmitFramePointers>
       <ProgramDataBaseFileName>$(OutDir)</ProgramDataBaseFileName>
-      <BrowseInformation></BrowseInformation>
+      <BrowseInformation>
+      </BrowseInformation>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FloatingPointExceptions>true</FloatingPointExceptions>
     </ClCompile>
+
     <ResourceCompile>
       <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
+      <SuppressStartupBanner>false</SuppressStartupBanner>
     </ResourceCompile>
+
     <Link>
       <AdditionalOptions>$(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)$(ProjectName).dll</OutputFile>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <ModuleDefinitionFile>.\$(ProjectName).def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)$(ProjectName).pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
       <MapFileName>$(OutDir)$(ProjectName).map</MapFileName>
+      <ProgramDatabaseFile>$(OutDir)$(ProjectName).pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <ImportLibrary>$(OutDir)zlibwapi.lib</ImportLibrary>
       <ImageHasSafeExceptionHandlers>true</ImageHasSafeExceptionHandlers>
     </Link>
+
     <PreBuildEvent>
       <Command>
       </Command>
@@ -188,37 +221,44 @@
       <TargetEnvironment>Win32</TargetEnvironment>
       <TypeLibraryName>$(OutDir)$(ProjectName).tlb</TypeLibraryName>
     </Midl>
+
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\..;..\..\masmx86;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;ZLIB_WINAPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ExceptionHandling></ExceptionHandling>
+      <ExceptionHandling>
+      </ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <PrecompiledHeaderOutputFile>$(IntDir)$(ProjectName).pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)</ObjectFileName>
+      <OmitFramePointers>false</OmitFramePointers>
       <ProgramDataBaseFileName>$(OutDir)</ProgramDataBaseFileName>
-      <BrowseInformation></BrowseInformation>
+      <BrowseInformation>
+      </BrowseInformation>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FloatingPointExceptions>true</FloatingPointExceptions>
     </ClCompile>
+
     <ResourceCompile>
-       <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-     <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <SuppressStartupBanner>false</SuppressStartupBanner>
     </ResourceCompile>
+
     <Link>
       <AdditionalOptions>$(AdditionalOptions)</AdditionalOptions>
-	  <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)$(ProjectName).dll</OutputFile>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <ModuleDefinitionFile>.\$(ProjectName).def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)$(ProjectName).pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
       <MapFileName>$(OutDir)$(ProjectName).map</MapFileName>
+      <ProgramDatabaseFile>$(OutDir)$(ProjectName).pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <DataExecutionPrevention>true</DataExecutionPrevention>
@@ -235,31 +275,38 @@
       <TargetEnvironment>Win32</TargetEnvironment>
       <TypeLibraryName>$(OutDir)$(ProjectName).tlb</TypeLibraryName>
     </Midl>
+
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\..;..\..\masmx86;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;ZLIB_WINAPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ExceptionHandling></ExceptionHandling>
+      <ExceptionHandling>
+      </ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <PrecompiledHeaderOutputFile>$(IntDir)$(ProjectName).pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)</ObjectFileName>
+      <OmitFramePointers>false</OmitFramePointers>
       <ProgramDataBaseFileName>$(OutDir)</ProgramDataBaseFileName>
-      <BrowseInformation></BrowseInformation>
+      <BrowseInformation>
+      </BrowseInformation>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FloatingPointExceptions>true</FloatingPointExceptions>
     </ClCompile>
+
     <ResourceCompile>
       <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
+      <SuppressStartupBanner>false</SuppressStartupBanner>
     </ResourceCompile>
+
     <Link>
       <AdditionalOptions>$(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)$(ProjectName).dll</OutputFile>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <ModuleDefinitionFile>.\$(ProjectName).def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -272,6 +319,7 @@
       <ImportLibrary>$(OutDir)zlibwapi.lib</ImportLibrary>
       <ImageHasSafeExceptionHandlers>true</ImageHasSafeExceptionHandlers>
     </Link>
+
     <PreBuildEvent>
       <Command>
       </Command>
@@ -286,32 +334,39 @@
       <TargetEnvironment>X64</TargetEnvironment>
       <TypeLibraryName>$(OutDir)$(ProjectName).tlb</TypeLibraryName>
     </Midl>
+
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\..\..;..\..\masmx86;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;ZLIB_WINAPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ExceptionHandling></ExceptionHandling>
+      <ExceptionHandling>
+      </ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <PrecompiledHeaderOutputFile>$(IntDir)$(ProjectName).pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)</ObjectFileName>
+      <OmitFramePointers>false</OmitFramePointers>
       <ProgramDataBaseFileName>$(OutDir)</ProgramDataBaseFileName>
-      <BrowseInformation></BrowseInformation>
+      <BrowseInformation>
+      </BrowseInformation>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FloatingPointExceptions>true</FloatingPointExceptions>
     </ClCompile>
+
     <ResourceCompile>
       <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
+      <SuppressStartupBanner>false</SuppressStartupBanner>
     </ResourceCompile>
+
     <Link>
       <AdditionalOptions>$(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)$(ProjectName).dll</OutputFile>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <ModuleDefinitionFile>.\$(ProjectName).def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -324,6 +379,7 @@
       <ImportLibrary>$(OutDir)zlibwapi.lib</ImportLibrary>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
+
     <PreBuildEvent>
       <Command>
       </Command>
@@ -337,33 +393,39 @@
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <TypeLibraryName>$(OutDir)$(ProjectName).tlb</TypeLibraryName>
     </Midl>
+
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\..\..;..\..\masmx86;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;ZLIB_WINAPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <StreamingSIMDExtensions2></StreamingSIMDExtensions2>
-      <ExceptionHandling></ExceptionHandling>
+      <ExceptionHandling>
+      </ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <PrecompiledHeaderOutputFile>$(IntDir)$(ProjectName).pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)</ObjectFileName>
+      <OmitFramePointers>false</OmitFramePointers>
       <ProgramDataBaseFileName>$(OutDir)</ProgramDataBaseFileName>
-      <BrowseInformation></BrowseInformation>
+      <BrowseInformation>
+      </BrowseInformation>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FloatingPointExceptions>false</FloatingPointExceptions>
     </ClCompile>
+
     <ResourceCompile>
       <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
+      <SuppressStartupBanner>false</SuppressStartupBanner>
     </ResourceCompile>
+
     <Link>
       <AdditionalOptions>$(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)$(ProjectName).dll</OutputFile>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <ModuleDefinitionFile>.\$(ProjectName).def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -376,6 +438,7 @@
       <ImportLibrary>$(OutDir)zlibwapi.lib</ImportLibrary>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
+
     <PreBuildEvent>
       <Command>
       </Command>
@@ -389,33 +452,39 @@
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <TypeLibraryName>$(OutDir)$(ProjectName).tlb</TypeLibraryName>
     </Midl>
+
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\..\..;..\..\masmx86;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;ZLIB_WINAPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <StreamingSIMDExtensions2></StreamingSIMDExtensions2>
-      <ExceptionHandling></ExceptionHandling>
+      <ExceptionHandling>
+      </ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <PrecompiledHeaderOutputFile>$(IntDir)$(ProjectName).pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)</ObjectFileName>
+      <OmitFramePointers>false</OmitFramePointers>
       <ProgramDataBaseFileName>$(OutDir)</ProgramDataBaseFileName>
-      <BrowseInformation></BrowseInformation>
+      <BrowseInformation>
+      </BrowseInformation>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FloatingPointExceptions>false</FloatingPointExceptions>
     </ClCompile>
+
     <ResourceCompile>
       <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
+      <SuppressStartupBanner>false</SuppressStartupBanner>
     </ResourceCompile>
+
     <Link>
       <AdditionalOptions>$(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)$(ProjectName).dll</OutputFile>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <ModuleDefinitionFile>.\$(ProjectName).def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -428,6 +497,7 @@
       <ImportLibrary>$(OutDir)zlibwapi.lib</ImportLibrary>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
+
     <PreBuildEvent>
       <Command>
       </Command>
@@ -442,31 +512,38 @@
       <TargetEnvironment>X64</TargetEnvironment>
       <TypeLibraryName>$(OutDir)$(ProjectName).tlb</TypeLibraryName>
     </Midl>
+
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\..;..\..\masmx86;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;ZLIB_WINAPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ExceptionHandling></ExceptionHandling>
+      <ExceptionHandling>
+      </ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <PrecompiledHeaderOutputFile>$(IntDir)$(ProjectName).pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)</ObjectFileName>
+      <OmitFramePointers>false</OmitFramePointers>
       <ProgramDataBaseFileName>$(OutDir)</ProgramDataBaseFileName>
-      <BrowseInformation></BrowseInformation>
+      <BrowseInformation>
+      </BrowseInformation>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FloatingPointExceptions>true</FloatingPointExceptions>
     </ClCompile>
+
     <ResourceCompile>
       <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
+      <SuppressStartupBanner>false</SuppressStartupBanner>
     </ResourceCompile>
+
     <Link>
       <AdditionalOptions>$(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)$(ProjectName).dll</OutputFile>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <ModuleDefinitionFile>.\$(ProjectName).def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -488,32 +565,38 @@
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <TypeLibraryName>$(OutDir)$(ProjectName).tlb</TypeLibraryName>
     </Midl>
+
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\..;..\..\masmx86;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;ZLIB_WINAPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <StreamingSIMDExtensions2></StreamingSIMDExtensions2>
-      <ExceptionHandling></ExceptionHandling>
+      <ExceptionHandling>
+      </ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <PrecompiledHeaderOutputFile>$(IntDir)$(ProjectName).pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)</ObjectFileName>
+      <OmitFramePointers>false</OmitFramePointers>
       <ProgramDataBaseFileName>$(OutDir)</ProgramDataBaseFileName>
-      <BrowseInformation></BrowseInformation>
+      <BrowseInformation>
+      </BrowseInformation>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FloatingPointExceptions>false</FloatingPointExceptions>
     </ClCompile>
+
     <ResourceCompile>
       <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
+      <SuppressStartupBanner>false</SuppressStartupBanner>
     </ResourceCompile>
+
     <Link>
       <AdditionalOptions>$(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)$(ProjectName).dll</OutputFile>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <ModuleDefinitionFile>.\$(ProjectName).def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -536,31 +619,38 @@
       <TargetEnvironment>X64</TargetEnvironment>
       <TypeLibraryName>$(OutDir)$(ProjectName).tlb</TypeLibraryName>
     </Midl>
+
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\..;..\..\masmx86;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;ZLIB_WINAPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ExceptionHandling></ExceptionHandling>
+      <ExceptionHandling>
+      </ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <PrecompiledHeaderOutputFile>$(IntDir)$(ProjectName).pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)</ObjectFileName>
+      <OmitFramePointers>false</OmitFramePointers>
       <ProgramDataBaseFileName>$(OutDir)</ProgramDataBaseFileName>
-      <BrowseInformation></BrowseInformation>
+      <BrowseInformation>
+      </BrowseInformation>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FloatingPointExceptions>true</FloatingPointExceptions>
     </ClCompile>
+
     <ResourceCompile>
       <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
+      <SuppressStartupBanner>false</SuppressStartupBanner>
     </ResourceCompile>
+
     <Link>
       <AdditionalOptions>$(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)$(ProjectName).dll</OutputFile>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <ModuleDefinitionFile>.\$(ProjectName).def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -573,6 +663,7 @@
       <ImportLibrary>$(OutDir)zlibwapi.lib</ImportLibrary>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
+
     <PreBuildEvent>
       <Command>
       </Command>
@@ -586,32 +677,38 @@
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <TypeLibraryName>$(OutDir)$(ProjectName).tlb</TypeLibraryName>
     </Midl>
+
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\..;..\..\masmx86;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;ZLIB_WINAPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <StreamingSIMDExtensions2></StreamingSIMDExtensions2>
-      <ExceptionHandling></ExceptionHandling>
+      <ExceptionHandling>
+      </ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <PrecompiledHeaderOutputFile>$(IntDir)$(ProjectName).pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)</ObjectFileName>
+      <OmitFramePointers>false</OmitFramePointers>
       <ProgramDataBaseFileName>$(OutDir)</ProgramDataBaseFileName>
-      <BrowseInformation></BrowseInformation>
+      <BrowseInformation>
+      </BrowseInformation>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FloatingPointExceptions>false</FloatingPointExceptions>
     </ClCompile>
+
     <ResourceCompile>
       <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
+      <SuppressStartupBanner>false</SuppressStartupBanner>
     </ResourceCompile>
+
     <Link>
       <AdditionalOptions>$(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)$(ProjectName).dll</OutputFile>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <ModuleDefinitionFile>.\$(ProjectName).def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -624,6 +721,7 @@
       <ImportLibrary>$(OutDir)zlibwapi.lib</ImportLibrary>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
+
     <PreBuildEvent>
       <Command>
       </Command>
@@ -637,32 +735,38 @@
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <TypeLibraryName>$(OutDir)$(ProjectName).tlb</TypeLibraryName>
     </Midl>
+
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\..;..\..\masmx86;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;ZLIB_WINAPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <StreamingSIMDExtensions2></StreamingSIMDExtensions2>
-      <ExceptionHandling></ExceptionHandling>
+      <ExceptionHandling>
+      </ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <PrecompiledHeaderOutputFile>$(IntDir)$(ProjectName).pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)</ObjectFileName>
+      <OmitFramePointers>false</OmitFramePointers>
       <ProgramDataBaseFileName>$(OutDir)</ProgramDataBaseFileName>
-      <BrowseInformation></BrowseInformation>
+      <BrowseInformation>
+      </BrowseInformation>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FloatingPointExceptions>false</FloatingPointExceptions>
     </ClCompile>
+
     <ResourceCompile>
       <PreprocessorDefinitions>BUILD_ENV_IS_VISUAL_STUDIO;PLATFORM_IS_$(Platform);NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
+      <SuppressStartupBanner>false</SuppressStartupBanner>
     </ResourceCompile>
+
     <Link>
       <AdditionalOptions>$(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)$(ProjectName).dll</OutputFile>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <ModuleDefinitionFile>.\$(ProjectName).def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -675,6 +779,7 @@
       <ImportLibrary>$(OutDir)zlibwapi.lib</ImportLibrary>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
+
     <PreBuildEvent>
       <Command>
       </Command>
@@ -685,7 +790,9 @@
     <ClCompile Include="..\..\..\adler32.c" />
     <ClCompile Include="..\..\..\compress.c" />
     <ClCompile Include="..\..\..\crc32.c" />
-    <ClCompile Include="..\..\..\deflate.c" />
+    <ClCompile Include="..\..\..\deflate.c">
+      <!-- <PreprocessToFile Condition="'$(Configuration)'=='Debug'">true</PreprocessToFile> -->
+    </ClCompile>
     <ClCompile Include="..\..\..\gzclose.c" />
     <ClCompile Include="..\..\..\gzlib.c" />
     <ClCompile Include="..\..\..\gzread.c" />
@@ -750,6 +857,39 @@
                        Since this task overrides the definition of an empty
                        imported target, it must follow the import. To be on the
                        safe side, it is defined dead last.
+
+    2019/03/14 - DAG - To find other empty targets such as these two that you
+                       can redefine (override) to do tuff, look for the
+                       following string at the beginning of an XML comment.
+
+                       		Redefine this target in your project
+
+                       The BeforeBuildGenerateSources target is ideal for
+                       displaying MSBuild property values.
+    ============================================================================
+  -->
+
+  <Target Name="BeforeBuildGenerateSources">
+    <Message Text="SolutionDir          = $(SolutionDir)" />
+    <Message Text="ProjectDir           = $(ProjectDir)" />
+    <Message Text="ProjectName          = $(ProjectName)" />
+    <Message Text="TargetName           = $(TargetName)" />
+    <Message Text="TargetExt            = $(TargetExt)" />
+    <Message Text="ProjectExt           = $(ProjectExt)" />
+    <Message Text="Platform             = $(Platform)" />
+    <Message Text="PlatformArchitecture = $(PlatformArchitecture)" />
+    <Message Text="Configuration        = $(Configuration)" />
+    <Message Text="OutDir               = $(OutDir)" />
+    <Message Text="IntDir               = $(IntDir)" />
+  </Target>
+
+  <!--
+    ============================================================================
+    2019/03/05 - DAG - The TestSubjectDLL property is set in the last of two
+                       unlabeled ItemGroup nodes at the top of the project file.
+                       Since this task overrides the definition of an empty
+                       imported target, it must follow the import. To be on the
+                       safe side, it is defined dead last.
     ============================================================================
   -->
 
@@ -757,7 +897,6 @@
     <Copy SourceFiles="@(TestSubjectDLL)"
     	  DestinationFolder="$(OutDir)"
     	  OverwriteReadOnlyFiles="true"
-    	  SkipUnchangedFiles="true"
-     />
+    	  SkipUnchangedFiles="true" />
   </Target>
 </Project>

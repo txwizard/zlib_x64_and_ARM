@@ -103,12 +103,16 @@
 
     Reference:	"ARM Intrinsics"
 			    https://docs.microsoft.com/en-us/cpp/intrinsics/arm-intrinsics?view=vs-2017
+
+	2019/03/22 - DAG - It appears that AdvancedVectorExtensions2 is equivalent
+	                   to StreamingSIMDExtensions2 for the x64 platform. For all
+	                   other platforms, both are disabled.
+
+	                   After further experimentation, I'm leaving the decision
+	                   to the compiler, since it appears that the default is to
+	                   use them if available.
     ============================================================================
   -->
-
-  <PropertyGroup Condition="'$(Platform)'=='Win32' OR '$(Platform)'=='x64' ">
-      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
-  </PropertyGroup>
 
   <!--
     ============================================================================
@@ -154,14 +158,24 @@
 
     <Link>
       <AdditionalDependencies>$(Platform)\zlibvc_$(Configuration)\zlibwapi.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <RandomizedBaseAddress>true</RandomizedBaseAddress>
-      <DataExecutionPrevention>true</DataExecutionPrevention>
-      <SuppressStartupBanner>false</SuppressStartupBanner>
       <TargetMachine>MachineX86</TargetMachine>
+      <TerminalServerAware>true</TerminalServerAware>
+
+      <!-- The following keys have the same values for MOST configurations and platforms. -->
+
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateMapFile>true</GenerateMapFile>
       <ImageHasSafeExceptionHandlers>true</ImageHasSafeExceptionHandlers>
+      <ImportLibrary>$(OutDir)libxmlwapi.lib</ImportLibrary>
+      <OptimizeReferences>false</OptimizeReferences>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
+      <ProgramDatabaseFile>$(OutDir)$(ProjectName).pdb</ProgramDatabaseFile>
+      <MapFileName>$(OutDir)$(ProjectName).map</MapFileName>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <SuppressStartupBanner>false</SuppressStartupBanner>
     </Link>
   </ItemDefinitionGroup>
 
@@ -196,16 +210,24 @@
 
     <Link>
       <AdditionalDependencies>$(Platform)\zlibvc_$(Configuration)\zlibwapi.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)testzlibdll.exe</OutputFile>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <OptimizeReferences>true</OptimizeReferences>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <RandomizedBaseAddress>true</RandomizedBaseAddress>
-      <DataExecutionPrevention>true</DataExecutionPrevention>
-      <SuppressStartupBanner>false</SuppressStartupBanner>
       <TargetMachine>MachineX86</TargetMachine>
+      <TerminalServerAware>true</TerminalServerAware>
+
+      <!-- The following keys have the same values for MOST configurations and platforms. -->
+
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateMapFile>true</GenerateMapFile>
       <ImageHasSafeExceptionHandlers>true</ImageHasSafeExceptionHandlers>
+      <ImportLibrary>$(OutDir)libxmlwapi.lib</ImportLibrary>
+      <OptimizeReferences>false</OptimizeReferences>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
+      <ProgramDatabaseFile>$(OutDir)$(ProjectName).pdb</ProgramDatabaseFile>
+      <MapFileName>$(OutDir)$(ProjectName).map</MapFileName>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <SuppressStartupBanner>false</SuppressStartupBanner>
     </Link>
   </ItemDefinitionGroup>
 
@@ -243,13 +265,24 @@
 
     <Link>
       <AdditionalDependencies>$(Platform)\zlibvc_$(Configuration)\zlibwapi.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)testzlib.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
-      <SuppressStartupBanner>false</SuppressStartupBanner>
       <TargetMachine>MachineX64</TargetMachine>
+      <TerminalServerAware>true</TerminalServerAware>
+
+      <!-- The following keys have the same values for MOST configurations and platforms. -->
+
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateMapFile>true</GenerateMapFile>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <ImportLibrary>$(OutDir)libxmlwapi.lib</ImportLibrary>
+      <OptimizeReferences>false</OptimizeReferences>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
+      <ProgramDatabaseFile>$(OutDir)$(ProjectName).pdb</ProgramDatabaseFile>
+      <MapFileName>$(OutDir)$(ProjectName).map</MapFileName>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <SuppressStartupBanner>false</SuppressStartupBanner>
     </Link>
   </ItemDefinitionGroup>
 
@@ -286,14 +319,24 @@
 
     <Link>
       <AdditionalDependencies>$(Platform)\zlibvc_$(Configuration)\zlibwapi.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <OptimizeReferences>true</OptimizeReferences>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <SuppressStartupBanner>false</SuppressStartupBanner>
       <TargetMachine>MachineX64</TargetMachine>
+      <TerminalServerAware>true</TerminalServerAware>
+
+      <!-- The following keys have the same values for MOST configurations and platforms. -->
+
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateMapFile>true</GenerateMapFile>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <ImportLibrary>$(OutDir)libxmlwapi.lib</ImportLibrary>
+      <OptimizeReferences>false</OptimizeReferences>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
+      <ProgramDatabaseFile>$(OutDir)$(ProjectName).pdb</ProgramDatabaseFile>
+      <MapFileName>$(OutDir)$(ProjectName).map</MapFileName>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <SuppressStartupBanner>false</SuppressStartupBanner>
     </Link>
   </ItemDefinitionGroup>
 
@@ -329,12 +372,21 @@
 
     <Link>
       <AdditionalDependencies>$(Platform)\zlibvc_$(Configuration)\zlibwapi.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
+
+      <!-- The following keys have the same values for MOST configurations and platforms. -->
+
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)testzlib.pdb</ProgramDatabaseFile>
-      <SubSystem>Console</SubSystem>
-      <SuppressStartupBanner>false</SuppressStartupBanner>
+      <GenerateMapFile>true</GenerateMapFile>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <ImportLibrary>$(OutDir)libxmlwapi.lib</ImportLibrary>
+      <OptimizeReferences>false</OptimizeReferences>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
+      <ProgramDatabaseFile>$(OutDir)$(ProjectName).pdb</ProgramDatabaseFile>
+      <MapFileName>$(OutDir)$(ProjectName).map</MapFileName>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <SuppressStartupBanner>false</SuppressStartupBanner>
     </Link>
   </ItemDefinitionGroup>
 
@@ -370,13 +422,21 @@
 
     <Link>
       <AdditionalDependencies>$(Platform)\zlibvc_$(Configuration)\zlibwapi.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <OptimizeReferences>true</OptimizeReferences>
+
+      <!-- The following keys have the same values for MOST configurations and platforms. -->
+
+      <DataExecutionPrevention>true</DataExecutionPrevention>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <SuppressStartupBanner>false</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateMapFile>true</GenerateMapFile>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <ImportLibrary>$(OutDir)libxmlwapi.lib</ImportLibrary>
+      <OptimizeReferences>false</OptimizeReferences>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
+      <ProgramDatabaseFile>$(OutDir)$(ProjectName).pdb</ProgramDatabaseFile>
+      <MapFileName>$(OutDir)$(ProjectName).map</MapFileName>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <SuppressStartupBanner>false</SuppressStartupBanner>
     </Link>
   </ItemDefinitionGroup>
 
@@ -412,11 +472,20 @@
 
     <Link>
       <AdditionalDependencies>$(Platform)\zlibvc_$(Configuration)\zlibwapi.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
+
+      <!-- The following keys have the same values for MOST configurations and platforms. -->
+
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)testzlib.pdb</ProgramDatabaseFile>
-      <SubSystem>Console</SubSystem>
+      <GenerateMapFile>true</GenerateMapFile>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <ImportLibrary>$(OutDir)libxmlwapi.lib</ImportLibrary>
+      <OptimizeReferences>false</OptimizeReferences>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
+      <ProgramDatabaseFile>$(OutDir)$(ProjectName).pdb</ProgramDatabaseFile>
+      <MapFileName>$(OutDir)$(ProjectName).map</MapFileName>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SuppressStartupBanner>false</SuppressStartupBanner>
     </Link>
   </ItemDefinitionGroup>
@@ -453,13 +522,21 @@
 
     <Link>
       <AdditionalDependencies>$(Platform)\zlibvc_$(Configuration)\zlibwapi.lib;version.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <OptimizeReferences>true</OptimizeReferences>
+
+      <!-- The following keys have the same values for MOST configurations and platforms. -->
+
+      <DataExecutionPrevention>true</DataExecutionPrevention>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <SuppressStartupBanner>false</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateMapFile>true</GenerateMapFile>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <ImportLibrary>$(OutDir)libxmlwapi.lib</ImportLibrary>
+      <OptimizeReferences>false</OptimizeReferences>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
+      <ProgramDatabaseFile>$(OutDir)$(ProjectName).pdb</ProgramDatabaseFile>
+      <MapFileName>$(OutDir)$(ProjectName).map</MapFileName>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <SuppressStartupBanner>false</SuppressStartupBanner>
     </Link>
   </ItemDefinitionGroup>
 
