@@ -134,6 +134,29 @@ __Notes__
    with the platform on which it runs. All Applications display this information
    as part of their output.
 
+As a convenience, the Visual C runtime libraries for all four supported
+platforms are organized by platform under directory `vcruntime140`, and the
+project build script installs the correct CRT library into the output
+directory. Two additional targets are configured to follow that; their goal is
+to maintain the directories of reference libraries required by the __libxml2__
+project, published at <https://github.com/txwizard/libxml2_x64_and_ARM>, and the
+reference libraries used at the TXWizard shop for native code development.
+
+Rather than using a __Post-Build__ step, these file copying operations use a
+`Copy` task in an `AfterBuild` target. This choice arose from research that led
+to the development of another custom target, `BeforeBuildGenerateSources`, that
+lists the resolved values of the major MSBuild macros. Its aoutput appears very
+close to the top of the build log, and the need for it arose from some early
+trouble shooting on the __zlib__ project, of which this project is one of the
+three dependencies that had to be found and built first. Since it earned its
+keep on that project, all four of these projects, in addition to two unrelated
+projects developed at the same time, incorporate this target.
+
+Though neither target is visible in the Visual Studio property pages, the VS
+property page editor preserves them when you edit the project properties in the
+IDE, though they won't retain the beautified form that you see here, since it
+removes all unnecessary white space.
+
 ## Getting the CRT Libraries: The Gory Details
 
 To use these libraries on any supported platform, you must acquire and install

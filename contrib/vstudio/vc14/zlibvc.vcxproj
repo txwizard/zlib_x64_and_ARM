@@ -87,8 +87,16 @@
 	<Message Text="IntDir         = $(IntDir)" />
   </Target>
 
+  <!-- This is the file list that goes into the Copy task of target AfterBuild. -->
+
   <ItemGroup>
     <TestSubjectDLL Include="$(SolutionDir)vcruntime140\$(Platform)\vcruntime140.dll" />
+  </ItemGroup>
+
+  <!-- This is the file list that goes into the Copy task of targets AfterBuild2 and AfterBuild3. -->
+
+  <ItemGroup>
+    <LibsBuilt Include="$(OutDir)$(TargetName)$(TargetExt);$(OutDir)zlibwapi.lib;$(OutDir)$(TargetName).pdb" />
   </ItemGroup>
 
   <PropertyGroup Label="Globals">
@@ -896,6 +904,43 @@
   <Target Name="AfterBuild">
     <Copy SourceFiles="@(TestSubjectDLL)"
     	  DestinationFolder="$(OutDir)"
+    	  OverwriteReadOnlyFiles="true"
+    	  SkipUnchangedFiles="true" />
+  </Target>
+
+  <Target Name="AfterBuild2"
+  	      AfterTargets="AfterBuild"
+  	      Condition="exists('$(WWLinkLibPath)') AND ( '$(Configuration)'=='Release' ) AND ( ( '$(Platform)'=='Win32' ) OR ( '$(Platform)'=='x64' ) )">
+
+  	<!--
+  		This task puts copies of the library files into the common library
+  		directory to which environment string WWLinkLibPath points. Unless the
+  		specified directory exists, this target is skipped.
+
+  		Since the predominant work in my shop targets Win32 and x64, only those
+  		two platforms go into the common library repository.
+  	-->
+
+    <Copy SourceFiles="@(LibsBuilt)"
+    	  DestinationFolder="$(WWLinkLibPath)"
+    	  OverwriteReadOnlyFiles="true"
+    	  SkipUnchangedFiles="true" />
+  </Target>
+
+  <Target Name="AfterBuild3"
+  	      AfterTargets="AfterBuild"
+  	      Condition="exists('C:\Users\DAG\Documents\_Clients\CodeProject Authors Group\Windows on ARM\libxml2\libxml2-2.9.9\win32\VC10\LIB') AND '$(Configuration)'=='Release'">
+
+  	<!--
+  		This task puts copies of the library files into the dedicated library
+  		directory of the libxml2 repository. Unless the specified directory
+  		exists, this target is skipped.
+
+  		Only release builds go into the libxml2 library repository.
+  	-->
+
+    <Copy SourceFiles="@(LibsBuilt)"
+    	  DestinationFolder="C:\Users\DAG\Documents\_Clients\CodeProject Authors Group\Windows on ARM\libxml2\libxml2-2.9.9\win32\VC10\LIB\$(Platform)"
     	  OverwriteReadOnlyFiles="true"
     	  SkipUnchangedFiles="true" />
   </Target>
